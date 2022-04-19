@@ -1,4 +1,14 @@
 # hand-gesture-recognition-using-mediapipe
+
+Pentru noua adnotare:
+
+**#0**Thumb up pentru - marit brush-ul
+**#1** Thumb down pentru -  micsorat brush-ul
+**#2** Pointer - pentru desenat 
+**#3** OK - STERGE tot desenul
+**#4** Trei degete ridicate (degetul mare si celelalte degete de langa) - UNDO
+**#5** Pace (2 degete) pentru - SELECTIE
+
 Estimate hand pose using MediaPipe (Python version).<br> This is a sample 
 program that recognizes hand signs and finger gestures with a simple MLP using the detected key points.
 <br> ❗ _️**This is English Translated version of the [original repo](https://github.com/Kazuhito00/hand-gesture-recognition-using-mediapipe). All Content is translated to english along with comments and notebooks**_ ❗
