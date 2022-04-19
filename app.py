@@ -151,13 +151,13 @@ def main():
                     point_history.append(landmark_list[8]) # append just the landmark of pointer finger tip
                     points.append(landmark_list[8])
 
-                    if landmark_list[8] in erase_points:
-                        erase_points = list(filter(lambda x: x!= landmark_list[8],erase_points))
+                    # if landmark_list[8] in erase_points:
+                    #     erase_points = list(filter(lambda x: x!= landmark_list[8],erase_points))
 
                 elif hand_sign_id == 0: # Open gesture
-                    # if len(points) > 0:
-                    #     points.pop()
-                    erase_points.append(landmark_list[8])
+                    if len(points) > 0:
+                        points.pop()
+                    # erase_points.append(landmark_list[8])
                 else:
                     point_history.append([0, 0])
                     # avoid memory overload, don't add [0,0] if already exist at the end of the list
@@ -166,11 +166,6 @@ def main():
 
                 if hand_sign_id == 3: # Ok gesture
                     points = []
-
-
-
-
-
 
                 # Finger gesture classification
                 point_history_len = len(pre_processed_point_history_list)
@@ -200,10 +195,14 @@ def main():
             if len(points) > 0 and points[-1] != [0, 0]:
                 points.append([0, 0])
 
-        debug_image = draw_point_history(debug_image, point_history)
+        # debug_image = draw_point_history(debug_image, point_history)
         # print(points)
         # img_copy = debug_image.copy()
+        #TODO: daca vreti sa va jucati si sa desenati:
+
         debug_image = draw_line(debug_image, points)
+        #TODO: erase nu functioneaza inca cum trebuie ignorati
+
         # debug_image = erase(debug_image,img_copy, erase_points)
         debug_image = draw_info(debug_image, fps, mode, number)
 
@@ -553,7 +552,7 @@ def draw_point_history(image, point_history):
 
     return image
 
-def draw_line(image, points,erase):
+def draw_line(image, points):
     if len(points) > 1:
         for i in range(len(points)-1):
             if points[i][0] != 0 and points[i][1] != 0 and points[i+1][0] != 0 and points[i+1][1] != 0:

@@ -25,3 +25,4 @@ class KeyPointClassifier():
 
             return result_index.item()
 
+# TODO : adauga threshold pentru predictii
