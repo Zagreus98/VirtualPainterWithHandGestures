@@ -6,8 +6,10 @@ Pentru noua adnotare:
 * **#1** Thumb down pentru -  micsorat brush-ul
 * **#2** Pointer - pentru desenat 
 * **#3** OK - STERGE tot desenul
-* **#4** Trei degete ridicate (degetul mare si celelalte degete de langa) - UNDO
+* **#4** Trei degete ridicate (degetul mare si celelalte degete de langa) - UNDO PROBLEMA: se confunda cu selectia zic sa folosim altceva
 * **#5** Pace (2 degete impreunate) pentru - SELECTIE
+* **#6** Open
+* **#7** Closed 
 
 Estimate hand pose using MediaPipe (Python version).<br> This is a sample 
 program that recognizes hand signs and finger gestures with a simple MLP using the detected key points.
