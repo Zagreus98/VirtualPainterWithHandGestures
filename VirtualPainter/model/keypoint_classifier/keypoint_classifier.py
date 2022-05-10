@@ -28,7 +28,7 @@ class KeyPointClassifier():
             result_index = torch.argmax(scores,dim=1)
 
             if scores.squeeze(0)[result_index] < self.score_th:
-                return 6
+                return 7
             else:
                 return result_index.item()
 

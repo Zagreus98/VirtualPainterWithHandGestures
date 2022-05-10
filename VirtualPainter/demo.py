@@ -8,7 +8,8 @@ from visualizer import Visualizer
 import mediapipe as mp
 from copy import deepcopy
 import csv
-
+#TODO: adauga si o functie de salvare poate un gest
+#TODO: adauga si o functie de schimbare de header
 class Demo:
     QUIT_KEYS = {27,ord('q')}
 
@@ -46,7 +47,7 @@ class Demo:
     def load_header(self):
 
         header = cv.imread('header.png')
-        header = cv.resize(header,(self.config.demo.cap_width // 2 ,self.config.demo.cap_height // 10))
+        header = cv.resize(header,(self.config.demo.cap_width // 2 ,self.config.demo.cap_height // 12))
         return header
 
     def run(self):
@@ -77,14 +78,22 @@ class Demo:
             image = cv.flip(image, 1)  # Mirror display
             debug_image = image.copy()
             visualizer.set_image(debug_image,self.header)
+            #TODO: fa o functie dedicata pentru header/guma
+            #  si aplica-l dupa procesare ca sa nu poti desena pe el
+
             # Detection implementation #############################################################
             image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
-            cv.circle(visualizer.image,
-                      (self.header.shape[1] + 100, self.header.shape[0] - 30),
-                      thickness // 2,
-                      color, -1)
-            # TODO: bucata de aici pana se termina procesarea si scrierea merge pusa intr-o functie separata
-            # sau facut cate un proces pentru fiecare procesare
+            if color == (0,0,0):
+                cv.circle(visualizer.image,
+                          (self.header.shape[1] + 100, self.header.shape[0] - 30),
+                          thickness // 2,
+                          color)
+            else:
+                cv.circle(visualizer.image,
+                          (self.header.shape[1] + 100, self.header.shape[0] - 30),
+                          thickness // 2,
+                          color, -1)
+            # TODO de facut cate un proces pentru fiecare procesare
             image.flags.writeable = False
             results = self.hands_detection.process(image)
             image.flags.writeable = True
@@ -111,7 +120,7 @@ class Demo:
                             lines.append([deepcopy(points), color,thickness])
 
 
-                    elif hand_sign_id == 4 and len(lines) > 0:  # UNDO gesture
+                    elif hand_sign_id == 6 and len(lines) > 0:  # UNDO gesture
                         mask = np.zeros((self.config.demo.cap_height, self.config.demo.cap_width, 3), dtype=np.uint8)
                         lines.pop()
                         mask = visualizer.undo_lines(mask, lines)
@@ -143,8 +152,11 @@ class Demo:
                     if hand_sign_id == 5: # selection
                         x = landmark_list[8][0]
                         y = landmark_list[8][1]
-                        if 0 < y < self.header.shape[0] and 0 < x < self.header.shape[1]:
+                        box_w = self.header.shape[1] // 15
+                        if 0 < y < self.header.shape[0] and 0 < x < self.header.shape[1] - box_w :
                             color = tuple(map(int,self.header[y,x,:]))
+                        if 0 < y < self.header.shape[0] and self.header.shape[1] - box_w < x < self.header.shape[1]:
+                            color = (0,0,0)
 
                     # Drawing part
                     visualizer.draw_bounding_rect(self.config.demo.draw_bbox, brect)
