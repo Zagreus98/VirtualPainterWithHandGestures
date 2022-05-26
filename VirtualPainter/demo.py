@@ -8,6 +8,7 @@ from visualizer import Visualizer
 import mediapipe as mp
 from copy import deepcopy
 import csv
+import datetime
 #TODO: adauga si o functie de salvare poate un gest
 #TODO: adauga si o functie de schimbare de header
 class Demo:
@@ -50,6 +51,14 @@ class Demo:
         header = cv.resize(header,(self.config.demo.cap_width // 2 ,self.config.demo.cap_height // 12))
         return header
 
+    def save_drawing(self,img):
+        dt = datetime.datetime.now()
+        time = dt.strftime('%Y%m%d_%H%M%S')
+        cv.imwrite(f'saved/drawing_{time}.png',img)
+
+
+
+
     def run(self):
         # Camera preparation ###############################################################
         cap = cv.VideoCapture(0)
@@ -63,13 +72,16 @@ class Demo:
         thickness = 10
         mask = np.zeros((self.config.demo.cap_height, self.config.demo.cap_width, 3), dtype=np.uint8)
         visualizer = self.visualizer
+        frame_counter = 0
         while True:
             fps = self.cvFpsCalc.get()
 
             # Press ESC or q to end
             key = cv.waitKey(10) & 0xff
             if key in self.QUIT_KEYS:
+                self.save_drawing(visualizer.image)
                 break
+
 
             # Camera capture ###############################################################
             ret, image = cap.read()
@@ -78,8 +90,16 @@ class Demo:
             image = cv.flip(image, 1)  # Mirror display
             debug_image = image.copy()
             visualizer.set_image(debug_image,self.header)
-            #TODO: fa o functie dedicata pentru header/guma
-            #  si aplica-l dupa procesare ca sa nu poti desena pe el
+
+            ## If s is pressed save drawing
+            if key == ord('s') & 0xff:
+                self.save_drawing(visualizer.image)
+                visualizer.image_saved()
+                frame_counter = 10
+            ## Keep the SAVE text on the image for 10 frames
+            if frame_counter > 0:
+                visualizer.image_saved()
+                frame_counter -= 1
 
             # Detection implementation #############################################################
             image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
@@ -93,7 +113,6 @@ class Demo:
                           (self.header.shape[1] + 100, self.header.shape[0] - 30),
                           thickness // 2,
                           color, -1)
-            # TODO de facut cate un proces pentru fiecare procesare
             image.flags.writeable = False
             results = self.hands_detection.process(image)
             image.flags.writeable = True

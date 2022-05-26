@@ -58,6 +58,12 @@ class Visualizer:
         cv.putText(self.image, "FPS:" + str(fps), (10, 30), cv.FONT_HERSHEY_SIMPLEX,
                    1.0, (255, 255, 255), 2, cv.LINE_AA)
 
+    def image_saved(self):
+        cv.putText(self.image, "SAVED", (self.image.shape[1]-150, 30), cv.FONT_HERSHEY_SIMPLEX,
+                   1.0, (0, 0, 0), 4, cv.LINE_AA)
+        cv.putText(self.image, "SAVED", (self.image.shape[1]-150, 30), cv.FONT_HERSHEY_SIMPLEX,
+                   1.0, (255, 255, 255), 2, cv.LINE_AA)
+
 
 
 

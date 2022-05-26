@@ -32,4 +32,3 @@ class KeyPointClassifier():
             else:
                 return result_index.item()
 
-# TODO : adauga threshold pentru predictii
